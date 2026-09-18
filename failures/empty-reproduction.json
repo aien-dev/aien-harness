@@ -1,0 +1,11 @@
+{
+  "id": "empty-reproduction",
+  "hurt": "An engineering handoff looked finished but omitted reproduction steps, so the next agent restarted the investigation.",
+  "eval": "reproduction_present",
+  "artifact": {
+    "bug": "login fails",
+    "reproduction_steps": [],
+    "failure_evidence": ""
+  },
+  "expect": "rejected"
+}

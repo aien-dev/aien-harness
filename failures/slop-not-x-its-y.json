@@ -1,0 +1,9 @@
+{
+  "id": "slop-not-x-its-y",
+  "hurt": "Generic AI cadence shipped in operator-facing prose.",
+  "eval": "slop_gate",
+  "artifact": {
+    "text": "It's not a chatbot. It's an operating system for the whole company."
+  },
+  "expect": "rejected"
+}

@@ -1,0 +1,11 @@
+{
+  "id": "research-unsupported-claim",
+  "hurt": "A complete-looking research handoff cited a source that did not support the claim. After a model change the same failure returned.",
+  "eval": "source_supports_claim",
+  "artifact": {
+    "claim": "TrueForge includes a built-in Daytona-free local host sandbox as the only supported provider.",
+    "excerpt": "Daytona is the only sandbox provider supported today. Support for additional providers is planned.",
+    "url": "https://trueforge.dev/sandbox"
+  },
+  "expect": "rejected"
+}
