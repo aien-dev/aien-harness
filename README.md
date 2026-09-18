@@ -1,3 +1,7 @@
+<p align="center">
+  <img src="assets/avatar.jpg" width="140" height="140" alt="AIEN Sovereign Intelligence" style="border-radius: 50%; border: 2px solid #f59e0b;">
+</p>
+
 # aien-harness
 
 Autonomous Change-Management, Schema Validation, and Eval Reliability Harness for AI Agents.

@@ -1,0 +1,28 @@
+name: Bug Report
+description: File a bug report for aien-harness
+labels: ["bug"]
+body:
+  - type: markdown
+    attributes:
+      value: Thank you for reporting a bug. For security vulnerabilities, refer to [SECURITY.md](SECURITY.md).
+  - type: textarea
+    id: description
+    attributes:
+      label: Bug Description
+      description: A clear description of what the bug is.
+    validations:
+      required: true
+  - type: textarea
+    id: reproduction
+    attributes:
+      label: Steps to Reproduce
+      description: Provide reproduction steps or minimal code.
+    validations:
+      required: true
+  - type: textarea
+    id: environment
+    attributes:
+      label: Environment
+      description: OS, architecture, runtime version.
+    validations:
+      required: true
