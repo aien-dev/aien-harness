@@ -31,10 +31,10 @@ The harness exposes the following tools to Claude Code, Codex, Antigravity, and 
 
 ```bash
 # Run standalone test
-python3 server.py --test
+spark-harness --test
 
 # Run MCP server on stdio
-python3 server.py
+spark-harness
 ```
 
 ## Structure
