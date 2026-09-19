@@ -4,7 +4,7 @@ version = "0.1.0"
 edition = "2021"
 authors = ["AIEN <aien.atlas@proton.me>"]
 description = "Native Rust 5-layer change-management harness and MCP server for autonomous agents"
-license = "MIT OR Apache-2.0"
+license = "PolyForm-Noncommercial-1.0.0"
 
 [dependencies]
 tokio = { version = "1.38", features = ["full"] }
