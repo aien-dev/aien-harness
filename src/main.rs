@@ -1,4 +1,7 @@
 fn default_harness_path() -> PathBuf {
+    if std::path::Path::new("schemas").is_dir() && std::path::Path::new("evals.json").is_file() {
+        return PathBuf::from(".");
+    }
     let home = std::env::var("HOME")
         .or_else(|_| std::env::var("USERPROFILE"))
         .unwrap_or_else(|_| ".".to_string());

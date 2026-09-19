@@ -218,3 +218,88 @@ impl HarnessEngine {
         Ok(file_path)
     }
 }
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+    use serde_json::json;
+
+    #[test]
+    fn test_slop_gate() {
+        let engine = HarnessEngine::new(".");
+        let clean = json!({ "text": "Direct execution of native Rust binary on DGX Spark." });
+        let slopped = json!({ "text": "In today's fast-paced world, this is a game-changer to delve into." });
+        let antithesis = json!({ "text": "It is not speed, it's quality." });
+
+        assert!(engine.run_eval("slop_gate", &clean).passed);
+        assert!(!engine.run_eval("slop_gate", &slopped).passed);
+        assert!(!engine.run_eval("slop_gate", &antithesis).passed);
+    }
+
+    #[test]
+    fn test_required_evidence() {
+        let engine = HarnessEngine::new(".");
+        let no_evidence = json!({ "text": "Sample" });
+        let has_evidence = json!({ "text": "Sample", "evidence": ["commit c9db3e2"] });
+
+        assert!(!engine.run_eval("required_evidence", &no_evidence).passed);
+        assert!(engine.run_eval("required_evidence", &has_evidence).passed);
+    }
+
+    #[test]
+    fn test_reproduction_present() {
+        let engine = HarnessEngine::new(".");
+        let invalid = json!({ "reproduction_steps": [] });
+        let valid = json!({
+            "reproduction_steps": ["step 1"],
+            "failure_evidence": "panic log"
+        });
+
+        assert!(!engine.run_eval("reproduction_present", &invalid).passed);
+        assert!(engine.run_eval("reproduction_present", &valid).passed);
+    }
+
+    #[test]
+    fn test_workflow_transitions() {
+        let mut engine = HarnessEngine::new(".");
+        engine.workflows.insert(
+            "test_flow".to_string(),
+            json!({
+                "states": {
+                    "start": { "next": ["in_progress"] },
+                    "in_progress": { "next": ["done"] },
+                    "done": { "next": [] }
+                }
+            }),
+        );
+
+        let mut wf = WorkflowState {
+            id: "wf-1".to_string(),
+            workflow_type: "test_flow".to_string(),
+            current_state: "start".to_string(),
+            history: Vec::new(),
+            created_at: chrono::Utc::now().to_rfc3339(),
+        };
+
+        assert!(engine.advance_workflow(&mut wf, "in_progress").is_ok());
+        assert_eq!(wf.current_state, "in_progress");
+        assert!(engine.advance_workflow(&mut wf, "done").is_ok());
+        assert_eq!(wf.current_state, "done");
+        assert!(engine.advance_workflow(&mut wf, "start").is_err());
+    }
+
+    #[test]
+    fn test_schema_validation() {
+        let engine = HarnessEngine::new(".");
+        let valid_payload = json!({
+            "bug": "Parser rejects valid token sequence",
+            "reproduction_steps": ["Run parser test"],
+            "failure_evidence": "thread panicked at line 42",
+            "regression_test": "tests::test_parser",
+            "diff_summary": "Fixed token parser logic",
+            "retest_evidence": "All tests passing cleanly"
+        });
+
+        assert!(engine.validate_schema("engineering_fix", &valid_payload).is_ok());
+    }
+}
