@@ -1,0 +1,11 @@
+name: Feature Request
+description: Suggest a feature or improvement for aien-harness
+labels: ["enhancement"]
+body:
+  - type: textarea
+    id: feature
+    attributes:
+      label: Feature Description
+      description: Describe the feature or improvement needed.
+    validations:
+      required: true

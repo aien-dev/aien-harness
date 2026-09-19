@@ -1,0 +1,17 @@
+/target
+**/*.rs.bk
+Cargo.lock
+.DS_Store
+*.db
+*.db-shm
+*.db-wal
+.env
+.env.*
+*.pem
+*.key
+*.token
+*.secret
+__pycache__/
+*.pyc
+venv/
+.venv/

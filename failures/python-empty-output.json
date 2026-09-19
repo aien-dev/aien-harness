@@ -1,0 +1,15 @@
+{
+  "id": "python-empty-output",
+  "hurt": "kernel returned no evidence",
+  "eval": "required_evidence",
+  "artifact": {
+    "goal": "count",
+    "code": "print(1)",
+    "stdout": "",
+    "ok": "false",
+    "evidence": []
+  },
+  "expect": "rejected",
+  "severity": "bad",
+  "lesson": "Python pipeline results need a nonempty evidence list; do not only tweak the prompt."
+}
