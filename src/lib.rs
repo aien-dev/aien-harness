@@ -57,9 +57,15 @@ impl HarnessEngine {
 
     /// Layer 1: Schema Validation
     pub fn validate_schema(&self, schema_name: &str, data: &Value) -> Result<(), String> {
-        let schema_path = self.base_path.join("schemas").join(format!("{}.json", schema_name));
+        let schema_path = self
+            .base_path
+            .join("schemas")
+            .join(format!("{}.json", schema_name));
         if !schema_path.exists() {
-            return Err(format!("Schema '{}' not found at {:?}", schema_name, schema_path));
+            return Err(format!(
+                "Schema '{}' not found at {:?}",
+                schema_name, schema_path
+            ));
         }
 
         let content = std::fs::read_to_string(&schema_path)
@@ -84,7 +90,7 @@ impl HarnessEngine {
             "slop_gate" => {
                 let text = payload.get("text").and_then(|v| v.as_str()).unwrap_or("");
                 let lower = text.to_lowercase();
-                
+
                 // Disallowed phrases
                 let forbidden = [
                     "this is the part where",
@@ -110,7 +116,8 @@ impl HarnessEngine {
                 }
 
                 // Check antithesis pattern: "not X, it's Y"
-                let antithesis_re = Regex::new(r"(?i)\bnot\s+([a-z0-9_\-\s]+),\s*(it's|it\s+is)\s+").unwrap();
+                let antithesis_re =
+                    Regex::new(r"(?i)\bnot\s+([a-z0-9_\-\s]+),\s*(it's|it\s+is)\s+").unwrap();
                 if antithesis_re.is_match(&lower) {
                     return EvalResult {
                         name: eval_name.to_string(),
@@ -145,7 +152,9 @@ impl HarnessEngine {
             "reproduction_present" => {
                 let repro = payload.get("reproduction_steps").and_then(|v| v.as_array());
                 let failure = payload.get("failure_evidence").and_then(|v| v.as_str());
-                if repro.map(|a| !a.is_empty()).unwrap_or(false) && failure.map(|s| !s.trim().is_empty()).unwrap_or(false) {
+                if repro.map(|a| !a.is_empty()).unwrap_or(false)
+                    && failure.map(|s| !s.trim().is_empty()).unwrap_or(false)
+                {
                     EvalResult {
                         name: eval_name.to_string(),
                         passed: true,
@@ -155,7 +164,8 @@ impl HarnessEngine {
                     EvalResult {
                         name: eval_name.to_string(),
                         passed: false,
-                        reason: "Reproduction steps and failure evidence must be non-empty.".to_string(),
+                        reason: "Reproduction steps and failure evidence must be non-empty."
+                            .to_string(),
                     }
                 }
             }
@@ -170,16 +180,22 @@ impl HarnessEngine {
 
     /// Layer 4: State Machine Workflow Engine
     pub fn advance_workflow(&self, wf: &mut WorkflowState, next_state: &str) -> Result<(), String> {
-        let wf_def = self.workflows.get(&wf.workflow_type)
+        let wf_def = self
+            .workflows
+            .get(&wf.workflow_type)
             .ok_or_else(|| format!("Unknown workflow type: '{}'", wf.workflow_type))?;
 
-        let states = wf_def.get("states").and_then(|v| v.as_object())
+        let states = wf_def
+            .get("states")
+            .and_then(|v| v.as_object())
             .ok_or_else(|| "Malformed workflow states definition".to_string())?;
 
-        let current_def = states.get(&wf.current_state)
+        let current_def = states
+            .get(&wf.current_state)
             .ok_or_else(|| format!("Current state '{}' not found in workflow", wf.current_state))?;
 
-        let allowed_next: Vec<&str> = current_def.get("next")
+        let allowed_next: Vec<&str> = current_def
+            .get("next")
             .and_then(|v| v.as_array())
             .map(|arr| arr.iter().filter_map(|s| s.as_str()).collect())
             .unwrap_or_default();
@@ -197,12 +213,21 @@ impl HarnessEngine {
     }
 
     /// Layer 5: Failure Replay Verification
-    pub fn record_failure(&self, task_id: &str, failure_type: &str, details: &Value) -> Result<PathBuf, String> {
+    pub fn record_failure(
+        &self,
+        task_id: &str,
+        failure_type: &str,
+        details: &Value,
+    ) -> Result<PathBuf, String> {
         let failures_dir = self.base_path.join("failures");
         std::fs::create_dir_all(&failures_dir)
             .map_err(|e| format!("Failed to create failures dir: {}", e))?;
 
-        let file_name = format!("failure_{}_{}.json", task_id, chrono::Utc::now().timestamp());
+        let file_name = format!(
+            "failure_{}_{}.json",
+            task_id,
+            chrono::Utc::now().timestamp()
+        );
         let file_path = failures_dir.join(file_name);
 
         let record = json!({
@@ -226,9 +251,10 @@ mod tests {
 
     #[test]
     fn test_slop_gate() {
-        let engine = HarnessEngine::new(".");
+        let engine = HarnessEngine::new(std::path::Path::new(env!("CARGO_MANIFEST_DIR")));
         let clean = json!({ "text": "Direct execution of native Rust binary on DGX Spark." });
-        let slopped = json!({ "text": "In today's fast-paced world, this is a game-changer to delve into." });
+        let slopped =
+            json!({ "text": "In today's fast-paced world, this is a game-changer to delve into." });
         let antithesis = json!({ "text": "It is not speed, it's quality." });
 
         assert!(engine.run_eval("slop_gate", &clean).passed);
@@ -238,7 +264,7 @@ mod tests {
 
     #[test]
     fn test_required_evidence() {
-        let engine = HarnessEngine::new(".");
+        let engine = HarnessEngine::new(std::path::Path::new(env!("CARGO_MANIFEST_DIR")));
         let no_evidence = json!({ "text": "Sample" });
         let has_evidence = json!({ "text": "Sample", "evidence": ["commit c9db3e2"] });
 
@@ -248,7 +274,7 @@ mod tests {
 
     #[test]
     fn test_reproduction_present() {
-        let engine = HarnessEngine::new(".");
+        let engine = HarnessEngine::new(std::path::Path::new(env!("CARGO_MANIFEST_DIR")));
         let invalid = json!({ "reproduction_steps": [] });
         let valid = json!({
             "reproduction_steps": ["step 1"],
@@ -261,7 +287,7 @@ mod tests {
 
     #[test]
     fn test_workflow_transitions() {
-        let mut engine = HarnessEngine::new(".");
+        let mut engine = HarnessEngine::new(std::path::Path::new(env!("CARGO_MANIFEST_DIR")));
         engine.workflows.insert(
             "test_flow".to_string(),
             json!({
@@ -290,7 +316,7 @@ mod tests {
 
     #[test]
     fn test_schema_validation() {
-        let engine = HarnessEngine::new(".");
+        let engine = HarnessEngine::new(std::path::Path::new(env!("CARGO_MANIFEST_DIR")));
         let valid_payload = json!({
             "bug": "Parser rejects valid token sequence",
             "reproduction_steps": ["Run parser test"],
@@ -300,6 +326,8 @@ mod tests {
             "retest_evidence": "All tests passing cleanly"
         });
 
-        assert!(engine.validate_schema("engineering_fix", &valid_payload).is_ok());
+        assert!(engine
+            .validate_schema("engineering_fix", &valid_payload)
+            .is_ok());
     }
 }

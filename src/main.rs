@@ -15,7 +15,10 @@ use std::io::{self, BufRead, Write};
 use std::path::PathBuf;
 
 #[derive(Parser, Debug)]
-#[command(name = "spark-harness", about = "Native Rust 5-Layer Change-Management Harness & MCP Server")]
+#[command(
+    name = "spark-harness",
+    about = "Native Rust 5-Layer Change-Management Harness & MCP Server"
+)]
 struct Cli {
     #[arg(long, default_value_os_t = default_harness_path())]
     harness_path: PathBuf,
@@ -54,16 +57,20 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
     match cli.command.unwrap_or(Commands::Test) {
         Commands::Test => {
             println!("=== Running spark-harness Native 5-Layer Verification Suite ===");
-            
+
             // 1. Slop Gate Eval Test
-            let clean_payload = json!({ "text": "Direct execution of native Rust binary on DGX Spark." });
+            let clean_payload =
+                json!({ "text": "Direct execution of native Rust binary on DGX Spark." });
             let slopped_payload = json!({ "text": "In today's fast-paced world, this is a game-changer to delve into." });
-            
+
             let res_clean = engine.run_eval("slop_gate", &clean_payload);
             let res_slop = engine.run_eval("slop_gate", &slopped_payload);
-            
+
             assert!(res_clean.passed, "Clean text should pass slop gate");
-            assert!(!res_slop.passed, "Sloppy text must be rejected by slop gate");
+            assert!(
+                !res_slop.passed,
+                "Sloppy text must be rejected by slop gate"
+            );
             println!("Layer 2 (Slop Gate Eval): PASSED");
 
             // 2. Evidence Requirement Eval Test
@@ -86,15 +93,24 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
             assert_eq!(wf.current_state, "regression_fail");
             assert!(engine.advance_workflow(&mut wf, "implement").is_ok());
             assert_eq!(wf.current_state, "implement");
-            assert!(engine.advance_workflow(&mut wf, "done").is_err(), "Cannot jump directly to done");
+            assert!(
+                engine.advance_workflow(&mut wf, "done").is_err(),
+                "Cannot jump directly to done"
+            );
             println!("Layer 4 (Deterministic Workflows): PASSED");
 
             // 4. Failure Replay Record Test
-            let log_path = engine.record_failure("test-task-1", "RegressionTestFailed", &json!({"test": "assert_eq"}))?;
+            let log_path = engine.record_failure(
+                "test-task-1",
+                "RegressionTestFailed",
+                &json!({"test": "assert_eq"}),
+            )?;
             assert!(log_path.exists(), "Failure log should be created on disk");
             println!("Layer 5 (Failure Replay Recording): PASSED");
 
-            println!("\nAll 5-layer change management harness invariants verified in pure native Rust.");
+            println!(
+                "\nAll 5-layer change management harness invariants verified in pure native Rust."
+            );
         }
 
         Commands::Validate { schema, data } => {
@@ -239,7 +255,7 @@ async fn run_mcp_stdio_loop(engine: HarnessEngine) -> io::Result<()> {
                         "jsonrpc": "2.0",
                         "id": req_id,
                         "error": { "code": -32601, "message": "Method or tool not found" }
-                    })
+                    }),
                 }
             }
 

@@ -4,7 +4,7 @@ version = "0.1.0"
 edition = "2021"
 authors = ["Drake Stapleton <drake.aien@proton.me>"]
 description = "Native Rust 5-layer change-management harness and MCP server for autonomous agents"
-license = "Apache-2.0 WITH LLVM-exception"
+license = "SRCL-1.0"
 
 [dependencies]
 tokio = { version = "1.38", features = ["full"] }
