@@ -2,7 +2,7 @@
 name = "spark-harness"
 version = "0.1.0"
 edition = "2021"
-authors = ["Drake Stapleton <drake.aien@proton.me>"]
+authors = ["Drake Stapleton <aien@aienos.com>"]
 description = "Native Rust 5-layer change-management harness and MCP server for autonomous agents"
 license = "SRCL-1.0"
 

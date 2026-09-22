@@ -13,7 +13,7 @@ The following versions of `aien-harness` are currently supported with security u
 We take the security of `aien-harness` and sovereign agent infrastructure seriously. If you discover a vulnerability, please report it responsibly rather than opening a public issue.
 
 ### Reporting Channels
-- **Email**: `aien.atlas@proton.me`
+- **Email**: `aien@aienos.com`
 - **GPG Key**: Available upon request or via public keyservers.
 
 ### What to Include in Your Report
