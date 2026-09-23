@@ -1,3 +1,7 @@
+> Archived: this repository is no longer authoritative. Canonical home: https://github.com/aien-dev/aien-sovereign-core/tree/main/crates/spark-harness
+>
+> History is preserved read-only. Open new work against the canonical home.
+
 <p align="center">
   <img src="assets/avatar.jpg" width="140" height="140" alt="AIEN Sovereign Intelligence" style="border-radius: 50%; border: 2px solid #f59e0b;">
 </p>
