@@ -25,7 +25,7 @@ This Constitution establishes our foundational principles, our engineering stand
 
 ### Section 3. Upstream Architectural Charter and Downstream Freedom
 1. This Constitution serves as the internal architectural charter, technical doctrine, and engineering standard for the upstream AIEN Sovereign AI Ecosystem and its core repositories.
-2. Downstream forks, independent applications, client libraries, and commercial distributions are governed strictly and exclusively by the terms of the Sovereign Resource Commons License (SRCL-1.0). Downstream developers possess complete freedom to innovate, customize, brand, and extend the software without obligation to retain, adopt, or enforce this internal development charter.
+2. Downstream forks, independent applications, client libraries, and commercial distributions are governed strictly and exclusively by the terms of the Apache License 2.0 with LLVM Exception. Downstream developers possess complete freedom to innovate, customize, brand, and extend the software without obligation to retain, adopt, or enforce this internal development charter.
 3. Legal Decoupling: Legal rights, grants, and covenants reside exclusively within the formal LICENSE document. This Constitution imposes zero behavioral covenants or philosophical constraints on downstream users, ensuring standard open-source compatibility across public package registries, corporate environments, and independent commercial deployments.
 
 ### Section 4. The Zero-Surveillance Invariant
@@ -35,7 +35,7 @@ Privacy is an architectural axiom, not an optional preference.
 3. Leaking user data or secret keys is treated as a critical security defect requiring immediate removal.
 
 ### Section 5. Open Knowledge and Sovereign Commons
-1. What we learn, we give away. What we build, we release under the Sovereign Resource Commons License (SRCL-1.0), combining Apache 2.0 operational freedom with reciprocal anti-enclosure protection.
+1. What we learn, we give away. What we build, we release under the Apache License 2.0 with LLVM Exception.
 2. Knowledge must never be fenced behind artificial monopoly barriers. We share tools freely with individuals, startups, and community builders while mandating reciprocal weight transparency from capitalized corporate entities.
 3. Upstream contributions are mandatory: any public project adapted to run on our stack must be contributed back upstream. We never hoard fixes.
 
@@ -92,7 +92,7 @@ To ensure that only those aligned with our cause contribute:
    - **Critical Invariants (Hard Blocking Gates)**: Pull requests must pass automated audits for zero plaintext secrets (hardware TPM only), zero telemetry, preservation of CONSTITUTION.md, and license integrity. Violations result in automatic PR rejection.
    - **Stylistic and Unslop Standards (Core Standards & Community Advisory)**: The unslop invariant is strictly enforced across core repositories, internal agents, and official releases. For outside community pull requests, style audits provide automated formatting suggestions rather than immediate rejection.
 2. **Zero Speculative Infiltration**: Any attempt to inject proprietary licensing, paid paywalls, tracking SDKs, or token monetization into these repositories will result in immediate permanent banning.
-3. **Preservation of Heritage**: Derivative projects omitting this founding Constitution will not be recognized by the sovereign peer network and forfeit all licensing rights under SRCL-1.0.
+3. **Preservation of Heritage**: Derivative projects omitting this founding Constitution will not be recognized by the sovereign peer network.
 4. **Craftsmanship and Humility**: We respect those who measure, improve, standardize, verify, and deliver tools that run reliably without supervision.
 
 ---
